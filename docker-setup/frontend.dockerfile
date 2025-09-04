@@ -6,14 +6,14 @@ WORKDIR /tmp
 RUN git clone --branch frontend --single-branch https://github.com/Netron-Frontend/cybertech.git frontend
 
 # Билд этап
-FROM node:18-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY --from=clone-frontend /tmp/frontend/ ./
 RUN yarn
 RUN yarn build
 
 # Финальный образ
-FROM node:18-alpine
+FROM node:24-alpine
 WORKDIR /app
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
