@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: docker-setup/frontend.dockerfile
+      args:
+        FRONTEND_BRANCH: frontend-branch-name  # ваша ветка фронтенда
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker-setup/backend.dockerfile
+      args:
+        BACKEND_BRANCH: backend-branch-name    # ваша ветка бэкенда
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
