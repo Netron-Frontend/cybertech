@@ -2,7 +2,7 @@
 services:
   frontend:
     build:
-      context: .
+      context: D:\My own\Уроки frontend\NextJS\cybertech
       dockerfile: docker-setup/frontend.dockerfile
       args:
         FRONTEND_BRANCH: frontend  # ваша ветка фронтенда
@@ -13,7 +13,7 @@ services:
 
   backend:
     build:
-      context: .
+      context: D:\My own\Уроки frontend\NextJS\cybertech
       dockerfile: docker-setup/backend.dockerfile
       args:
         BACKEND_BRANCH: backend    # ваша ветка бэкенда
