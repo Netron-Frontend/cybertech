@@ -1,4 +1,4 @@
-ARG FRONTEND_BRANCH=frontend-branch-name
+ARG FRONTEND_BRANCH=frontend
 
 # Клонируем ветку фронтенда
 FROM alpine/git AS clone-frontend

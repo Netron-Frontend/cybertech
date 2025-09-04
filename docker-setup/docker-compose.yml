@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   frontend:
@@ -6,7 +5,7 @@ services:
       context: .
       dockerfile: docker-setup/frontend.dockerfile
       args:
-        FRONTEND_BRANCH: frontend-branch-name  # ваша ветка фронтенда
+        FRONTEND_BRANCH: frontend  # ваша ветка фронтенда
     ports:
       - "3000:3000"
     environment:
@@ -17,7 +16,7 @@ services:
       context: .
       dockerfile: docker-setup/backend.dockerfile
       args:
-        BACKEND_BRANCH: backend-branch-name    # ваша ветка бэкенда
+        BACKEND_BRANCH: backend    # ваша ветка бэкенда
     ports:
       - "3001:3001"
     environment:

@@ -1,4 +1,4 @@
-ARG BACKEND_BRANCH=backend-branch-name
+ARG BACKEND_BRANCH=backend
 
 # Клонируем ветку бэкенда
 FROM alpine/git AS clone-backend
