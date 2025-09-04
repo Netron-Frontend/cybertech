@@ -9,7 +9,7 @@ RUN git clone --branch backend --single-branch https://github.com/Netron-Fronten
 FROM node:18-alpine AS builder
 WORKDIR /app
 COPY --from=clone-backend /tmp/backend/ ./
-RUN yarn install
+RUN yarn
 RUN yarn build
 
 # Финальный образ
