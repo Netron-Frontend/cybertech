@@ -1,10 +1,8 @@
 services:
   frontend:
     build:
-      context: ../
-      dockerfile: docker-setup/frontend.dockerfile
-      args:
-        - FRONTEND_BRANCH=frontend
+      context: .  # меняем на текущую директорию
+      dockerfile: frontend.dockerfile
     ports:
       - "3000:3000"
     environment:
@@ -13,10 +11,8 @@ services:
 
   backend:
     build:
-      context: ../
-      dockerfile: docker-setup/backend.dockerfile
-      args:
-        - BACKEND_BRANCH=backend
+      context: .  # меняем на текущую директорию
+      dockerfile: backend.dockerfile
     ports:
       - "3001:3001"
     environment:

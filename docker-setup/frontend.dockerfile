@@ -3,7 +3,7 @@ ARG FRONTEND_BRANCH=frontend
 # Клонируем ветку фронтенда
 FROM alpine/git AS clone-frontend
 WORKDIR /tmp
-RUN git clone --branch ${FRONTEND_BRANCH} --single-branch https://github.com/Netron-Frontend/cybertech.git frontend
+RUN git clone --branch frontend --single-branch https://github.com/Netron-Frontend/cybertech.git frontend
 
 # Билд этап
 FROM node:18-alpine AS builder

@@ -3,7 +3,7 @@ ARG BACKEND_BRANCH=backend
 # Клонируем ветку бэкенда
 FROM alpine/git AS clone-backend
 WORKDIR /tmp
-RUN git clone --branch ${BACKEND_BRANCH} --single-branch https://github.com/Netron-Frontend/cybertech.git backend
+RUN git clone --branch backend --single-branch https://github.com/Netron-Frontend/cybertech.git backend
 
 # Билд этап
 FROM node:18-alpine AS builder
