@@ -4,7 +4,7 @@ services:
       context: ../
       dockerfile: docker-setup/frontend.dockerfile
       args:
-        - FRONTEND_BRANCH=frontend  # укажите реальное имя ветки фронтенда
+        - FRONTEND_BRANCH=frontend
     ports:
       - "3000:3000"
     environment:
@@ -16,7 +16,7 @@ services:
       context: ../
       dockerfile: docker-setup/backend.dockerfile
       args:
-        - BACKEND_BRANCH=backend  # укажите реальное имя ветки бэкенда
+        - BACKEND_BRANCH=backend
     ports:
       - "3001:3001"
     environment:
