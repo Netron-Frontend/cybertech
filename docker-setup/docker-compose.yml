@@ -1,23 +1,24 @@
-
 services:
   frontend:
     build:
-      context: D:\My own\Уроки frontend\NextJS\cybertech
+      context: ../
       dockerfile: docker-setup/frontend.dockerfile
       args:
-        FRONTEND_BRANCH: frontend  # ваша ветка фронтенда
+        - FRONTEND_BRANCH=frontend  # укажите реальное имя ветки фронтенда
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
+    container_name: cybertech-frontend
 
   backend:
     build:
-      context: D:\My own\Уроки frontend\NextJS\cybertech
+      context: ../
       dockerfile: docker-setup/backend.dockerfile
       args:
-        BACKEND_BRANCH: backend    # ваша ветка бэкенда
+        - BACKEND_BRANCH=backend  # укажите реальное имя ветки бэкенда
     ports:
       - "3001:3001"
     environment:
       - NODE_ENV=production
+    container_name: cybertech-backend
