@@ -5,3 +5,4 @@ README.md
 .dockerignore
 **/*.dockerfile
 docker-compose*.yml
+.env
