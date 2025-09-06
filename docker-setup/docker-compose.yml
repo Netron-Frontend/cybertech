@@ -1,5 +1,5 @@
-services:
 
+services:
   postgres:
     image: postgres:latest
     container_name: postgres_container
@@ -11,23 +11,35 @@ services:
       - .env
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   frontend:
     build:
-      context: .  # меняем на текущую директорию
+      context: .
       dockerfile: frontend.dockerfile
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production  # Исправлен синтаксис
     container_name: cybertech-frontend
+    depends_on:
+      - backend  # Добавлена зависимость
 
   backend:
     build:
-      context: .  # меняем на текущую директорию
+      context: .
       dockerfile: backend.dockerfile
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     container_name: cybertech-backend
+    depends_on:
+      - postgres
+    env_file:  # Добавьте env_file для backend
+      - .env
+
+volumes:
+  postgres_data:  # Объявите volume здесь
