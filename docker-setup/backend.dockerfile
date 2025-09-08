@@ -19,5 +19,6 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/yarn.lock ./
 RUN yarn install --production
 COPY --from=builder /app/dist ./dist
+RUN yarn
 EXPOSE 3001
-CMD ["yarn", "start:prod"]
+CMD ["yarn", "start:dev"]
