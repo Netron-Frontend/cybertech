@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { NextApiResponse } from 'next';
+import { FormDataResponse } from '@/types/ApiTypes';
+import { CreateUserDto, User } from '@/types/user';
+
 const apiClient = axios.create({
 	baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
 	headers: {
@@ -7,17 +9,35 @@ const apiClient = axios.create({
 	}
 });
 
-export interface FormData {
-	name: string;
-	email: string;
-	message: string;
-}
+export const userService = {
+	createUser: async (userData: CreateUserDto): Promise<User> => {
+		const response = await apiClient.post<User>('/users', userData);
+		return response.data;
+	},
 
-export interface FormDataResponse {
-	status: string;
-	message: string;
-	data: FormData;
-}
+	// Получить всех пользователей
+	getUsers: async (): Promise<User[]> => {
+		const response = await apiClient.get<User[]>('/users');
+		return response.data;
+	},
+
+	// Получить пользователя по ID
+	getUserById: async (id: number): Promise<User> => {
+		const response = await apiClient.get<User>(`/users/${id}`);
+		return response.data;
+	},
+
+	// Обновить пользователя
+	updateUser: async (id: number, userData: Partial<CreateUserDto>): Promise<User> => {
+		const response = await apiClient.patch<User>(`/users/${id}`, userData);
+		return response.data;
+	},
+
+	// Удалить пользователя
+	deleteUser: async (id: number): Promise<void> => {
+		await apiClient.delete(`/users/${id}`);
+	}
+};
 
 export const submitForm = async (data: FormData): Promise<FormDataResponse> => {
 	try {

@@ -9,7 +9,7 @@ interface FormData {
 	name: string;
 	date: string;
 	time: string;
-	guests: number;
+	guestsCountCount: number;
 	phone: string;
 	wishes: string;
 }
@@ -22,7 +22,7 @@ export default function NotFoundForm() {
 		name: '',
 		date: '',
 		time: '',
-		guests: 2,
+		guestsCountCount: 2,
 		phone: '',
 		wishes: ''
 	});
@@ -31,7 +31,7 @@ export default function NotFoundForm() {
 		const { name, value } = e.target;
 		setFormData(prev => ({
 			...prev,
-			[name]: name === 'guests' ? parseInt(value) || 2 : value
+			[name]: name === 'guestsCount' ? parseInt(value) || 2 : value
 		}));
 	};
 
@@ -42,7 +42,7 @@ export default function NotFoundForm() {
 
 		try {
 			// Отправляем данные на бэкенд используя Axios
-			const response = await axios.post('http://localhost:3001/api/form', formData, {
+			const response = await axios.post('http://localhost:3001/users', formData, {
 				headers: {
 					'Content-Type': 'application/json'
 				}
@@ -148,7 +148,7 @@ export default function NotFoundForm() {
 				Количество гостей
 				<input
 					type='number'
-					name='guests'
+					name='guestsCount'
 					placeholder='2'
 					onChange={handleChange}
 					min='1'
