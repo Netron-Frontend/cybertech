@@ -32,4 +32,4 @@ RUN yarn build
 EXPOSE 3001
 
 # Команда для разработки с миграциями
-CMD sh -c "yarn start:dev"
+RUN ["yarn start:dev"]
