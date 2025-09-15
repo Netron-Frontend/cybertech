@@ -7,22 +7,23 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   const config = new DocumentBuilder()
-    .setTitle('CyberTech docs')
-    .setDescription('Documentation for CyberTech')
-    .setVersion('beta')
-    .build();
+  .setTitle('CyberTech docs')
+  .setDescription('docs for cybertech')
+  .setVersion('beta')
+  .build();
   
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, documentFactory())
+  SwaggerModule.setup('docs', app, documentFactory);
+  
   
   app.enableCors({
-    origin: 'http://localhost:3000',
     credentials: true,
-  })
-  app.useGlobalPipes(new ValidationPipe())
+    origin: 'htts://localhost:3000',
+  });
   
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(process.env.PORT ?? 3001);
-  console.log('Nest server started on port http://localhost:3001')
-  console.log('Swagger docs started on http://localhost:3001/docs')
+  console.log ("Nest project running on http://localhost:3001/");
+  console.log ("Swagger running on http://localhost:3001/docs");
 }
 bootstrap();
