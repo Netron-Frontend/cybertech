@@ -1,0 +1,65 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FormBooking {
+  id          String            @id @default(cuid())
+  name        String // Имя клиента
+  date        DateTime // Дата бронирования
+  time        String // Время бронирования
+  guestsCount Int               @default(2) // Количество гостей
+  phoneNumber String // Номер телефона
+  notes       String? // Пожелания/комментарии
+  status      FormBookingStatus @default(PENDING) // Статус бронирования
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  // Связи
+  userId  String? // ID администратора
+  user    User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+  tableId String? // ID стола/места
+  table   Table?  @relation(fields: [tableId], references: [id], onDelete: SetNull)
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String // Хэшированный пароль
+  name      String
+  role      UserRole @default(MANAGER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Связи
+  bookings FormBooking[]
+}
+
+model Table {
+  id          String  @id @default(cuid())
+  tableNumber Int     @unique // Номер стола
+  capacity    Int // Вместимость
+  location    String? // Расположение
+  isAvailable Boolean @default(true)
+
+  // Связи
+  bookings FormBooking[]
+}
+
+// Enums
+enum FormBookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum UserRole {
+  ADMIN
+  MANAGER
+}

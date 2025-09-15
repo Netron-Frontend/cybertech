@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { CreateFormBookingDto } from './dto/create-form-booking.dto';
-import { FormBookingStatus } from '../../generated/prisma';
 import { PrismaService } from '../prisma/prisma.service';
+import { FormBookingStatus } from '@prisma/client';
 
 
 @Injectable()
