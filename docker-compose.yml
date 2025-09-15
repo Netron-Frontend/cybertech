@@ -31,12 +31,16 @@ services:
     ports:
       - ${BACKEND_PORT}
     volumes:
-      - backend_node_modules:/app/node_modules
+      - .:/app  # Весь проект для hot-reload
+      - /app/node_modules  # Чтобы не перезаписывать node_modules
+      - /app/dist  # Для отслеживания сборки
     depends_on:
       - postgres
     networks:
       - app-network
     restart: unless-stopped
+
+    command: sh -c "sleep 5 && yarn prisma migrate deploy && yarn start:dev"
 
   # Frontend
   frontend:
