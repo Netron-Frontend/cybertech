@@ -2,32 +2,34 @@
 FROM node:22-alpine
 
 # Устанавливаем yarn, git и зависимости для Prisma
-RUN apk add --no-cache git openssl libc6-compat && \
-    ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2
+RUN apk add --no-cache git openssl libc6-compat
+
+# Создаем симлинк только если он не существует
+RUN [ ! -f /lib/ld-linux-x86-64.so.2 ] && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 || true
 
 # Рабочая директория
 WORKDIR /app
 
 # Клонируем репозиторий (ARG будут переданы из docker-compose)
-ARG GIT_BRANCH=feature/backend
+ARG GIT_BRANCH=backend
 ARG GIT_REPO
 RUN git clone -b ${GIT_BRANCH} ${GIT_REPO} . && \
     rm -rf .git
 
-# Копируем Prisma схему (если она не в репозитории)
-COPY prisma ./prisma/
-
 # Устанавливаем зависимости через yarn
 RUN yarn install
 
-# Генерируем Prisma Client
+# Генерируем Prisma Client (из клонированного репозитория)
 RUN yarn prisma generate
 
 # Копируем всё (если нужно добавить локальные файлы)
 COPY . .
 
+# Собираем приложение
+RUN yarn build
+
 # Открываем порт
 EXPOSE 3001
 
-# Команда для разработки с hot-reload и миграциями
+# Команда для разработки с миграциями
 CMD sh -c "yarn prisma migrate deploy && yarn start:dev"
