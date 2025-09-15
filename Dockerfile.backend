@@ -16,11 +16,11 @@ ARG GIT_REPO
 RUN git clone -b ${GIT_BRANCH} ${GIT_REPO} . && \
     rm -rf .git
 
-# Устанавливаем зависимости через yarn
-RUN yarn install
-
 # Генерируем Prisma Client (из клонированного репозитория)
 RUN yarn prisma generate
+
+# Устанавливаем зависимости через yarn
+RUN yarn install
 
 # Копируем всё (если нужно добавить локальные файлы)
 COPY . .
