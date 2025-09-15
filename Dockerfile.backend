@@ -5,6 +5,7 @@ FROM node:22-alpine
 RUN apk add --no-cache git openssl libc6-compat
 
 # Создаем симлинк только если он не существует
+RUN [ ! -f /lib/ld-linux-x86-64.so.2 ] && ln -s /lib/libc.musl-x86_64.so.1 /lib/ld-linux-x86-64.so.2 || true
 
 # Рабочая директория
 WORKDIR /app
@@ -20,7 +21,6 @@ RUN yarn prisma generate
 
 # Устанавливаем зависимости через yarn
 RUN yarn install
-
 # Копируем всё (если нужно добавить локальные файлы)
 COPY . .
 
@@ -31,4 +31,4 @@ RUN yarn build
 EXPOSE 3001
 
 # Команда для разработки с миграциями
-RUN ["yarn start:dev"]
+CMD sh -c "yarn prisma migrate deploy && yarn start:dev"
