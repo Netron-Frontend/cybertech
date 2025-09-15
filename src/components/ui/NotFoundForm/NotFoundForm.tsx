@@ -1,68 +1,54 @@
 'use client';
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import FormNotFoundBtn from '@/components/ui/buttons/FormNotFoundBtn/formNotFoundBtn';
-
-interface FormData {
-	name: string;
-	date: string;
-	time: string;
-	guestsCountCount: number;
-	phone: string;
-	wishes: string;
-}
+import { useState } from 'react';
+import { bookingApi, BookingData } from '@/lib/api';
 
 export default function NotFoundForm() {
-	const router = useRouter();
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState<string>('');
-	const [formData, setFormData] = useState<FormData>({
+	const [formData, setFormData] = useState<BookingData>({
 		name: '',
 		date: '',
 		time: '',
-		guestsCountCount: 2,
-		phone: '',
-		wishes: ''
+		guestsCount: 2,
+		phoneNumber: '',
+		notes: ''
 	});
-
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
-		setFormData(prev => ({
-			...prev,
-			[name]: name === 'guestsCount' ? parseInt(value) || 2 : value
-		}));
-	};
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		setIsLoading(true);
-		setError('');
 
-		try {
-			// Отправляем данные на бэкенд используя Axios
-			const response = await axios.post('http://localhost:3001/users', formData, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
+		const result = await bookingApi.createBooking(formData);
+
+		if (result.success) {
+			alert('Бронирование успешно создано!');
+			// Сброс формы
+			setFormData({
+				name: '',
+				date: '',
+				time: '',
+				guestsCount: 2,
+				phoneNumber: '',
+				notes: ''
 			});
-
-			console.log('Данные успешно отправлены:', response.data);
-
-			// Перенаправляем на страницу успеха
-			router.push('/success');
-		} catch (err: any) {
-			setError(err.response?.data?.message || 'Ошибка при отправке формы');
-			console.error('Ошибка:', err);
-		} finally {
-			setIsLoading(false);
+		} else {
+			alert(`Ошибка: ${result.message}`);
 		}
+
+		setIsLoading(false);
 	};
 
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+		const { name, value } = e.target;
+		setFormData(prev => ({
+			...prev,
+			[name]: name === 'guestsCount' ? parseInt(value) : value
+		}));
+	};
 	return (
 		<form
-			onSubmit={handleSubmit}
 			style={{
 				display: 'flex',
 				flexDirection: 'column',
@@ -73,28 +59,11 @@ export default function NotFoundForm() {
 				left: '68px'
 			}}
 		>
-			{/* Поле ввода ошибок */}
-			{error && (
-				<div
-					style={{
-						color: 'red',
-						backgroundColor: '#ffebee',
-						padding: '10px',
-						borderRadius: '5px',
-						border: '1px solid red'
-					}}
-				>
-					{error}
-				</div>
-			)}
-
 			<div style={{ flexGrow: 1, width: '448px', height: '50px' }}>
 				<input
 					type='text'
 					name='name'
 					placeholder='Имя'
-					value={formData.name}
-					onChange={handleChange}
 					required
 					style={{
 						width: '210px',
@@ -110,8 +79,6 @@ export default function NotFoundForm() {
 					type='date'
 					name='date'
 					placeholder='Дата'
-					value={formData.date}
-					onChange={handleChange}
 					required
 					style={{
 						width: '105px',
@@ -128,8 +95,6 @@ export default function NotFoundForm() {
 					type='time'
 					name='time'
 					placeholder='Время'
-					value={formData.time}
-					onChange={handleChange}
 					required
 					style={{
 						width: '105px',
@@ -150,7 +115,6 @@ export default function NotFoundForm() {
 					type='number'
 					name='guestsCount'
 					placeholder='2'
-					onChange={handleChange}
 					min='1'
 					max='20'
 					style={{
@@ -171,8 +135,6 @@ export default function NotFoundForm() {
 				type='tel'
 				name='phone'
 				placeholder='Номер телефона'
-				value={formData.phone}
-				onChange={handleChange}
 				required
 				style={{
 					width: '394px',
@@ -188,8 +150,6 @@ export default function NotFoundForm() {
 			<textarea
 				name='wishes'
 				placeholder='Ваши пожелания'
-				value={formData.wishes}
-				onChange={handleChange}
 				style={{
 					width: '394px',
 					height: '120px',

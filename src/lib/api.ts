@@ -1,52 +1,67 @@
+// lib/api-service.ts
 import axios from 'axios';
-import { FormDataResponse } from '@/types/ApiTypes';
-import { CreateUserDto, User } from '@/types/user';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 
 const apiClient = axios.create({
-	baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+	baseURL: API_BASE_URL,
 	headers: {
 		'Content-Type': 'application/json'
 	}
 });
 
-export const userService = {
-	createUser: async (userData: CreateUserDto): Promise<User> => {
-		const response = await apiClient.post<User>('/users', userData);
-		return response.data;
-	},
+export interface BookingData {
+	name: string;
+	date: string;
+	time: string;
+	guestsCount: number;
+	phoneNumber: string;
+	notes?: string;
+}
 
-	// Получить всех пользователей
-	getUsers: async (): Promise<User[]> => {
-		const response = await apiClient.get<User[]>('/users');
-		return response.data;
-	},
+export interface ApiResponse {
+	success: boolean;
+	data?: any;
+	message?: string;
+}
 
-	// Получить пользователя по ID
-	getUserById: async (id: number): Promise<User> => {
-		const response = await apiClient.get<User>(`/users/${id}`);
-		return response.data;
-	},
-
-	// Обновить пользователя
-	updateUser: async (id: number, userData: Partial<CreateUserDto>): Promise<User> => {
-		const response = await apiClient.patch<User>(`/users/${id}`, userData);
-		return response.data;
-	},
-
-	// Удалить пользователя
-	deleteUser: async (id: number): Promise<void> => {
-		await apiClient.delete(`/users/${id}`);
-	}
-};
-
-export const submitForm = async (data: FormData): Promise<FormDataResponse> => {
-	try {
-		const response = await apiClient.post<FormDataResponse>('/api/form', data);
-		return response.data;
-	} catch (error: any) {
-		if (axios.isAxiosError(error)) {
-			throw new Error(error.response?.data?.message || 'Ошибка при отправке формы');
+export const bookingApi = {
+	// Создать бронирование
+	createBooking: async (bookingData: BookingData): Promise<ApiResponse> => {
+		try {
+			const response = await apiClient.post('/bookings', bookingData);
+			return response.data;
+		} catch (error: any) {
+			return {
+				success: false,
+				message: error.response?.data?.message || 'Ошибка при создании бронирования'
+			};
 		}
-		throw new Error('Неизвестная ошибка');
+	},
+
+	// Получить все бронирования
+	getBookings: async (): Promise<ApiResponse> => {
+		try {
+			const response = await apiClient.get('/bookings');
+			return response.data;
+		} catch (error: any) {
+			return {
+				success: false,
+				message: error.response?.data?.message || 'Ошибка при получении бронирований'
+			};
+		}
+	},
+
+	// Обновить статус бронирования
+	updateBookingStatus: async (id: string, status: string): Promise<ApiResponse> => {
+		try {
+			const response = await apiClient.patch(`/bookings/${id}`, { status });
+			return response.data;
+		} catch (error: any) {
+			return {
+				success: false,
+				message: error.response?.data?.message || 'Ошибка при обновлении статуса'
+			};
+		}
 	}
 };
