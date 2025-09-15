@@ -73,6 +73,8 @@ export default function NotFoundForm() {
 						padding: '10px 22px',
 						backgroundColor: isLoading ? 'grey' : 'none'
 					}}
+					value={formData.name}
+					onChange={handleChange}
 					disabled={isLoading}
 				/>
 				<input
@@ -89,6 +91,8 @@ export default function NotFoundForm() {
 						marginLeft: '14px',
 						backgroundColor: isLoading ? 'grey' : 'none'
 					}}
+					value={formData.date}
+					onChange={handleChange}
 					disabled={isLoading}
 				/>
 				<input
@@ -105,6 +109,8 @@ export default function NotFoundForm() {
 						marginLeft: '14px',
 						backgroundColor: isLoading ? 'grey' : 'none'
 					}}
+					value={formData.time}
+					onChange={handleChange}
 					disabled={isLoading}
 				/>
 			</div>
@@ -127,6 +133,8 @@ export default function NotFoundForm() {
 						marginLeft: '14px',
 						backgroundColor: isLoading ? 'grey' : 'none'
 					}}
+					value={formData.guestsCount}
+					onChange={handleChange}
 					disabled={isLoading}
 				/>
 			</label>
@@ -144,6 +152,8 @@ export default function NotFoundForm() {
 					padding: '10px 22px',
 					backgroundColor: isLoading ? 'grey' : 'none'
 				}}
+				value={formData.phoneNumber}
+				onChange={handleChange}
 				disabled={isLoading}
 			/>
 
@@ -159,6 +169,8 @@ export default function NotFoundForm() {
 					padding: '10px 22px',
 					backgroundColor: isLoading ? '#2b2b2f' : 'none'
 				}}
+				value={formData.notes}
+				onChange={handleChange}
 				disabled={isLoading}
 			/>
 
